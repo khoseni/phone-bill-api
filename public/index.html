@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Plans</title>
+    <script src="./express.js"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="body" x-data="totalphonebillWidget">
+    <h1>Price Plans for Totalphonebill</h1>
+   
+    <br>
+
+    <section>
+        <table x-show="showTable"
+               x-transition:enter="fade-enter-active" 
+               x-transition:enter-start="fade-enter-from" 
+               x-transition:enter-end="fade-enter-to" 
+               x-transition:leave="fade-leave-active" 
+               x-transition:leave-start="fade-leave-from" 
+               x-transition:leave-end="fade-leave-to">
+            <thead>
+                <tr>
+                    <th><strong>Plan Name</strong></th>
+                    <th><strong>SMS Price</strong></th>
+                    <th><strong>Call Price</strong></th>
+                </tr>
+            </thead>
+            <tbody>
+                <template x-for="plan in pricePlans" :key="plan.plan_name">
+                    <tr>
+                        <td x-text="plan.plan_name"></td>
+                        <td x-text="plan.sms_price"></td>
+                        <td x-text="plan.call_price"></td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </section>
+    <br>
+
+    <button @click="showFirstSection = !showFirstSection" x-text="showFirstSection ? 'Hide Widgets' : 'Show Widgets'"></button>
+    <br>
+
+    <section class="flex-model"
+             x-show="showFirstSection"
+             x-transition:enter="slide-enter-active"
+             x-transition:enter-start="slide-enter-from"
+             x-transition:enter-end="slide-enter-to"
+             x-transition:leave="slide-leave-active"
+             x-transition:leave-start="slide-leave-from"
+             x-transition:leave-end="slide-leave-to">
+
+        <div class="widget">
+            <h3>Calculate Your Phone Bill</h3>
+            <div x-show="billMessage.length > 0" class="message" x-text="billMessage">
+                <!-- Display bill message here -->
+            </div>
+            <div class="input">
+                <label for="plan">Plan Name: </label>
+                <input type="text" placeholder="Enter plan name" x-model="plan" id="plan"><br><br>
+                <label for="usage">Usage Details: </label>
+                <input type="text" placeholder="e.g., call,sms" x-model="usage" id="usage">
+            </div>
+            <br>
+            <div class="cont">
+                <button x-on:click="calculateBill()">Compute Bill</button>
+            </div>
+        </div>
+
+        <div class="create">
+            <h3>Add a New Phone Plan</h3>
+            <div class="input">
+                <label for="new_plan_name">Plan Name: </label>
+                <input type="text" placeholder="Enter plan name" x-model="new_plan_name" id="new_plan_name"><br><br>
+                <label for="new_sms_price">SMS Price: </label>
+                <input type="text" placeholder="0.00" x-model="new_sms_price" id="new_sms_price"><br><br>
+                <label for="new_call_price">Call Price: </label>
+                <input type="text" placeholder="0.00" x-model="new_call_price" id="new_call_price">
+            </div>
+            <br>
+            <div class="cont">
+                <button x-on:click="createPlan()">Add Plan</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="flex-model"
+             x-show="showFirstSection"
+             x-transition:enter="slide-enter-active"
+             x-transition:enter-start="slide-enter-from"
+             x-transition:enter-end="slide-enter-to"
+             x-transition:leave="slide-leave-active"
+             x-transition:leave-start="slide-leave-from"
+             x-transition:leave-end="slide-leave-to">
+
+        <div class="update">
+            <h3>Update an Existing Plan</h3>
+            <div class="input">
+                <label for="updatePlanName">Plan Name: </label>
+                <input type="text" placeholder="Enter plan name" x-model="updatePlanName" id="updatePlanName"><br><br>
+                <label for="updateSMSPrice">New SMS Price: </label>
+                <input type="text" placeholder="0.00" x-model="updateSMSPrice" id="updateSMSPrice"><br><br>
+                <label for="updateCallPrice">New Call Price: </label>
+                <input type="text" placeholder="0.00" x-model="updateCallPrice" id="updateCallPrice"><br><br>
+            </div>
+            <div class="cont">
+                <button x-on:click="updatePlan()">Update Plan</button>
+            </div>
+        </div>
+
+        <div class="delete">
+            <h3>Remove a Phone Plan</h3>
+            <div class="input">
+                <label for="deletePlanName">Plan Name to Delete: </label>
+                <input type="text" placeholder="Enter plan name" x-model="deletePlanName" id="deletePlanName">
+            </div>
+            <div class="cont">
+                <button x-on:click="deletePlan()">Delete Plan</button>
+            </div>
+        </div>
+    </section>
+    
+</body>
+</html>
